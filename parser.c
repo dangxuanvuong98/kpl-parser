@@ -82,35 +82,27 @@ void compileBlock5(void) {
 }
 
 void compileConstDecls(void) {
-  assert("Parsing subconstants...");
   while (lookAhead->tokenType == TK_IDENT)
       compileConstDecl();
-  assert("Subconstants parsed!");
 }
 
 void compileConstDecl(void) {
-  assert("Parsing constant...");
   eat(TK_IDENT);
   eat(SB_EQ);
   compileConstant();
   eat(SB_SEMICOLON);
-  assert("Constant parsed!");
 }
 
 void compileTypeDecls(void) {
-  assert("Parsing subtypes...");
   while (lookAhead->tokenType == TK_IDENT)
       compileTypeDecl();
-  assert("Subtypes parsed!");
 }
 
 void compileTypeDecl(void) {
-  assert("Parsing a type...");
   eat(TK_IDENT);
   eat(SB_EQ);
   compileType();
   eat(SB_SEMICOLON);
-  assert("Type parsed!");
 }
 
 void compileVarDecls(void) {
@@ -130,13 +122,17 @@ void compileVarDecl(void) {
 }
 
 void compileSubDecls(void) {
-  assert("Parsing subtoutines ....");
+	assert("Parsing subtoutines ....");
   if (lookAhead->tokenType == KW_FUNCTION) {
+  	  
       compileFuncDecl();
       compileSubDecls();
+      
   } else if (lookAhead->tokenType == KW_PROCEDURE) {
+  	
       compileProcDecl();
       compileSubDecls();
+      
   }
   assert("Subtoutines parsed ....");
 }
@@ -183,7 +179,6 @@ void compileUnsignedConstant(void) {
 }
 
 void compileConstant(void) {
-  assert("Parsing a constant...");
   switch(lookAhead->tokenType) {
   case SB_PLUS:
       eat(SB_PLUS);
@@ -200,7 +195,6 @@ void compileConstant(void) {
       compileConstant2();
       break;
   }
-  assert("Constant parsed!");
 }
 
 void compileConstant2(void) {
@@ -406,7 +400,7 @@ void compileWhileSt(void) {
   compileCondition();
   eat(KW_DO);
   compileStatement();
-  assert("While statement pased ....");
+  assert("While statement parsed ....");
 }
 
 void compileForSt(void) {
