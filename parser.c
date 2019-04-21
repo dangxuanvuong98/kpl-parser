@@ -106,35 +106,27 @@ void compileTypeDecl(void) {
 }
 
 void compileVarDecls(void) {
-//  assert("Parsing variables...");
   while(lookAhead->tokenType == TK_IDENT)
       compileVarDecl();
-//  assert("Variables parsed");
 }
 
 void compileVarDecl(void) {
-//  assert("Parsing a variable...");
   eat(TK_IDENT);
   eat(SB_COLON);
   compileType();
   eat(SB_SEMICOLON);
-//  assert("Variable parsed!");
 }
 
 void compileSubDecls(void) {
-	assert("Parsing subtoutines ....");
-  if (lookAhead->tokenType == KW_FUNCTION) {
-
-      compileFuncDecl();
-
-      compileSubDecls();
-      
-  } else if (lookAhead->tokenType == KW_PROCEDURE) {
-
+  assert("Parsing subtoutines ....");
+  while(1){
+    if (lookAhead->tokenType == KW_FUNCTION) {
+      compileFuncDecl();   
+    } else if (lookAhead->tokenType == KW_PROCEDURE) {
       compileProcDecl();
-
-      compileSubDecls();
-      
+    }
+    else
+      break;
   }
   assert("Subtoutines parsed ....");
 }
