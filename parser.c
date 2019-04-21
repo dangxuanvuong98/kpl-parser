@@ -264,11 +264,13 @@ void compileParams(void) {
       compileParams2();
       eat(SB_RPAR);
       break;
+  /*
   case SB_COLON:
   case SB_SEMICOLON:
       break;
+  */
   default:
-      error(ERR_INVALIDPARAM, lookAhead->lineNo, lookAhead->colNo);
+      //error(ERR_INVALIDPARAM, lookAhead->lineNo, lookAhead->colNo);
       break;
   }
 }
