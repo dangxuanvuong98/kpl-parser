@@ -125,8 +125,7 @@ void compileSubDecls(void) {
     } else if (lookAhead->tokenType == KW_PROCEDURE) {
       compileProcDecl();
     }
-    else
-      break;
+    else break;
   }
   assert("Subtoutines parsed ....");
 }
