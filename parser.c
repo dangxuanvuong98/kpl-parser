@@ -134,7 +134,7 @@ void compileFuncDecl(void) {
   assert("Parsing a function ....");
   eat(KW_FUNCTION);
   eat(TK_IDENT);
-  compileParams();
+  compileFuncParams();
   eat(SB_COLON);
   compileBasicType();
   eat(SB_SEMICOLON);
@@ -147,7 +147,7 @@ void compileProcDecl(void) {
   assert("Parsing a procedure ....");
   eat(KW_PROCEDURE);
   eat(TK_IDENT);
-  compileParams();
+  compileProcParams();
   eat(SB_SEMICOLON);
   compileBlock();
   eat(SB_SEMICOLON);
@@ -251,7 +251,35 @@ void compileParams(void) {
       compileParams2();
       eat(SB_RPAR);
       break;
+  case SB_COLON:
+  case SB_SEMICOLON:
+      break;
   default:
+      error(ERR_INVALIDPARAM, lookAhead->lineNo, lookAhead->colNo);
+      break;
+  }
+}
+
+void compileFuncParams(void) {
+  compileParams();
+  switch (lookAhead->tokenType) {
+    // Follow
+  case SB_COLON:
+      break;
+  default:
+      error(ERR_INVALIDPARAM, lookAhead->lineNo, lookAhead->colNo);
+      break;
+  }
+}
+
+void compileProcParams(void) {
+  compileParams();
+  switch (lookAhead->tokenType) {
+  // Follow
+  case SB_SEMICOLON:
+      break;
+  default:
+      error(ERR_INVALIDPARAM, lookAhead->lineNo, lookAhead->colNo);
       break;
   }
 }
