@@ -57,15 +57,56 @@ void compileBlock(void) {
 }
 
 void compileConstDecls(void) {
-  // TODO
+  // DONE
+  assert("Parsing contant declares ....");
+  if (lookAhead->tokenType == KW_CONST) {
+      eat(KW_CONST);
+      while (true) {
+          eat(TK_IDENT);
+          eat(SB_EQ);
+          compileConstant();
+          eat(SB_SEMICOLON);
+          if (lookAhead->tokenType != TK_IDENT) {
+              break;
+          }
+      }
+  }
+  assert("Contant declares parsed ....");
 }
 
 void compileTypeDecls(void) {
-  // TODO
+  // DONE
+  if (lookAhead->tokenType == KW_TYPE) {
+      eat(KW_TYPE);
+      while (true) {
+          eat(TK_IDENT);
+          eat(SB_EQ);
+          compileType();
+          eat(SB_SEMICOLON);
+          if (lookAhead->tokenType != TK_IDENT) {
+              break;
+          }
+      }
+  }
+  assert("Type declares parsed ....");
 }
 
 void compileVarDecls(void) {
-  // TODO
+  // DONE
+  assert("Parsing variable declares ....")
+  if (lookAhead->tokenType == KW_VAR) {
+      eat(KW_VAR);
+      while (true) {
+          eat(TK_IDENT);
+          eat(SB_COLON);
+          compileType();
+          eat(SB_SEMICOLON);
+          if (lookAhead->tokenType != TK_IDENT) {
+              break;
+          }
+      }
+  }
+  assert("Variable declares parsed ....");
 }
 
 void compileSubDecls(void) {
@@ -90,9 +131,11 @@ void compileFuncDecl(void) {
   // DONE
   eat(KW_FUNCTION);
   eat(TK_IDENT);
-  compileParamList();
+  if (lookAhead->tokenType == SB_LPAR) {
+    compileParamList();
+  }
   eat(SB_COLON);
-  compileBasicType();
+  compileType();
   eat(SB_SEMICOLON);
   compileBlock();
   eat(SB_SEMICOLON);
@@ -104,7 +147,9 @@ void compileProcDecl(void) {
   // DONE
   eat(KW_PROCEDURE);
   eat(TK_IDENT);
-  compileParamList();
+  if (lookAhead->tokenType == SB_LPAR) {
+    compileParamList();
+  }
   eat(SB_SEMICOLON);
   compileBlock();
   eat(SB_SEMICOLON);
@@ -113,7 +158,20 @@ void compileProcDecl(void) {
 
 void compileParamList(void) {
   assert("Parsing param list ....");
-  // TODO
+  // DONE
+  eat(SB_LPAR);
+  while (true) {
+      if (lookAhead->tokenType = KW_VAR) {
+          eat(KW_VAR);
+      }
+      eat(TK_IDENT);
+      eat(SB_COLON);
+      compileBasicType();
+      if (lookAhead->tokenType != SB_SEMICOLON) {
+        break;
+      }
+      eat(SB_SEMICOLON);
+  }
   assert("Param list parsed ....");
 }
 
