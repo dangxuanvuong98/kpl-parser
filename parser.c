@@ -40,20 +40,24 @@ void compileProgram(void) {
 
 void compileBlock(void) {
   assert("Parsing a Block ....");
-  if (lookAhead->tokenType == KW_CONST) {
-    eat(KW_CONST);
-    compileConstDecl();
+  // DONE
     compileConstDecls();
-    compileBlock2();
-  } 
-  else compileBlock2();
+    compileTypeDecls();
+    compileVarDecls();
+    compileSubDecls();
+    eat(KW_BEGIN);
+    while (true) {
+        compileStatement();
+        if (lookAhead->tokenType == KW_END) {
+            break;
+        }
+    }
+    eat(KW_END);
   assert("Block parsed!");
 }
 
 void compileConstDecls(void) {
-  while (lookAhead->tokenType==TK_IDENT) {
-    compileConstDecl(); 
-  }
+  // TODO
 }
 
 void compileTypeDecls(void) {
@@ -64,15 +68,46 @@ void compileVarDecls(void) {
   // TODO
 }
 
+void compileSubDecls(void) {
+    // DONE
+    assert("Parsing sub routines ....")
+    while (true) {
+        switch (lookAhead->tokenType) {
+            case KW_FUNCTION:
+                compileFuncDecl();
+                break;
+            case KW_PROCEDURE:
+                compileProcDecl();
+                break;
+            default:
+                return;
+        }
+    }
+}
+
 void compileFuncDecl(void) {
   assert("Parsing a function ....");
-  // TODO
+  // DONE
+  eat(KW_FUNCTION);
+  eat(TK_IDENT);
+  compileParamList();
+  eat(SB_COLON);
+  compileBasicType();
+  eat(SB_SEMICOLON);
+  compileBlock();
+  eat(SB_SEMICOLON);
   assert("Function parsed ....");
 }
 
 void compileProcDecl(void) {
   assert("Parsing a procedure ....");
-  // TODO
+  // DONE
+  eat(KW_PROCEDURE);
+  eat(TK_IDENT);
+  compileParamList();
+  eat(SB_SEMICOLON);
+  compileBlock();
+  eat(SB_SEMICOLON);
   assert("Procedure parsed ....");
 }
 
@@ -97,7 +132,7 @@ void compileType(void) {
 void compileBasicType(void) {
   // TODO
 }
-void compileStatements(void) {
+void compileStatement(void) {
   // TODO
 }
 
