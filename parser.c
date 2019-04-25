@@ -58,7 +58,7 @@ void compileBlock(void) {
 
 void compileConstDecls(void) {
   // DONE
-  assert("Parsing contant declares ....");
+  assert("Parsing constant declares ....");
   if (lookAhead->tokenType == KW_CONST) {
       eat(KW_CONST);
       while (true) {
@@ -71,7 +71,7 @@ void compileConstDecls(void) {
           }
       }
   }
-  assert("Contant declares parsed ....");
+  assert("Constant declares parsed ....");
 }
 
 void compileTypeDecls(void) {
@@ -176,11 +176,32 @@ void compileParamList(void) {
 }
 
 void compileUnsignedConstant(void) {
-  // TODO
+  // DONE
+  switch(lookAhead->tokenType) {
+      case TK_NUMBER:
+          eat(TK_NUMBER);
+          break;
+      case TK_IDENT:
+          eat(TK_IDENT);
+          break;
+      case TK_CHAR:
+          eat(TK_CHAR);
+          break;
+      default:
+          error(ERR_INVALIDCONSTANT, lookAhead->lineNo, lookAhead->colNo);
+          break;
+  }
 }
 
 void compileConstant(void) {
   // TODO
+  assert("Parsing a constant ....");
+  if (lookAhead->tokenType == TK_CHAR) {
+      eat(TK_CHAR);
+  } else {
+      switch (lookAhead->tokenType) {}
+  }
+  assert("Constant parsed!");
 }
 
 void compileType(void) {
