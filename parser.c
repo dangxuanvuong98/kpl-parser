@@ -215,12 +215,43 @@ void compileConstant(void) {
 }
 
 void compileType(void) {
-  // DOING - Vuong
+  // DONE - Vuong
   assert("Parsing a type ....");
+  switch (lookAhead->tokenType) {
+      case TK_IDENT:
+          compile(TK_IDENT);
+          break;
+      case KW_ARRAY:
+          eat(KW_ARRAY);
+          eat(SB_LSEL);
+          compileUnsignedInteger();
+          eat(SB_RSEL);
+          eat(KW_OF);
+          compileType();
+          break;
+      case KW_INTEGER:
+      case KW_CHAR:
+          compileBasicType();
+          break;
+      default:
+          error(ERR_INVALIDTYPE, lookAhead->lineNo, lookAhead->colNo);
+          break;
+  }
 }
 
 void compileBasicType(void) {
-  // TODO
+  // DONE - Vuong
+  switch (lookAhead->tokenType) {
+      case KW_INTEGER:
+          eat(KW_INTEGER);
+          break;
+      case KW_CHAR:
+          eat(KW_CHAR);
+          break;
+      default:
+          error(ERR_INVALIDTYPE, lookAhead->lineNo, lookAhead->colNo);
+          break;
+  }
 }
 void compileStatement(void) {
   // TODO
