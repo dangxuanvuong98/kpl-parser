@@ -254,7 +254,31 @@ void compileBasicType(void) {
   }
 }
 void compileStatement(void) {
-  // TODO
+  // DONE - Vuong
+  assert("Parsing a statement ....");
+  switch (lookAhead->tokenType) {
+      case TK_IDENT:
+          compileAssignSt();
+          break;
+      case KW_CALL:
+          compileCallSt();
+          break;
+      case KW_BEGIN:
+          compileGroupSt();
+          break;
+      case KW_IF:
+          compileIfSt();
+          break;
+      case KW_WHILE:
+          compileWhileSt();
+          break;
+      case KW_FOR:
+          compileForSt();
+          break;
+      default:
+          break;
+  }
+  assert("Statement parsed!");
 }
 
 void compileAssignSt(void) {
