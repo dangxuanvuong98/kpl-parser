@@ -209,7 +209,7 @@ void compileConstant(void) {
           default:
               break;
       }
-      compileIndentifier();
+      compileIdentifier();
   }
   assert("Constant parsed!");
 }
@@ -289,37 +289,80 @@ void compileAssignSt(void) {
 
 void compileCallSt(void) {
   assert("Parsing a call statement ....");
-  // TODO
+  // DONE - Vuong
+    eat(KW_CALL);
+    compileIdentifier();
+    eat(SB_LPAR);
+    while (true) {
+        compileExpression();
+        if (lookAhead->tokenType == SB_COMMA) {
+            eat(SB_COMMA);
+        } else {
+            break;
+        }
+    }
+    eat(SB_RPAR);
   assert("Call statement parsed ....");
 }
 
 void compileGroupSt(void) {
   assert("Parsing a group statement ....");
-  // TODO
+  // DONE - Vuong
+  eat(KW_BEGIN);
+  compileStatement();
+  while (true) {
+      if (lookAhead->tokenType == SB_SEMICOLON) {
+          eat(SB_SEMICOLON);
+      } else {
+          break;
+      }
+      compileStatement();
+  }
+  eat(KW_END);
   assert("Group statement parsed ....");
 }
 
 void compileIfSt(void) {
   assert("Parsing an if statement ....");
-  // TODO
+  // DONE - Vuong
+  eat(KW_IF);
+  compileCondition();
+  eat(KW_THEN);
+  compileStatement();
+  if (lookAhead->tokenType = KW_ELSE) {
+      eat(KW_ELSE);
+      compileStatement();
+  };
   assert("If statement parsed ....");
 }
 
 void compileWhileSt(void) {
   assert("Parsing a while statement ....");
-  // TODO
+  // DONE - Vuong
+  eat(KW_WHILE);
+  compileCondition();
+  eat(KW_DO);
+  compileStatement();
   assert("While statement pased ....");
 }
 
 void compileForSt(void) {
   assert("Parsing a for statement ....");
-  // TODO
+  // DONE - Vuong
+  eat(KW_FOR);
+  compileIdentifier();
+  eat(SB_ASSIGN);
+  compileExpression();
+  eat(KW_TO);
+  compileExpression();
+  eat(KW_DO);
+  compileStatement();
   assert("For statement parsed ....");
 }
 
 void compileVariable(void) {
   // DONE - Vuong
-  compileIndentifier();
+  compileIdentifier();
   while (true) {
       if (lookAhead->tokenType == SB_LSEL) {
           eat(SB_LSEL);
@@ -401,7 +444,7 @@ void compileCondition(void) {
   compileExpression();
 }
 
-void compileIndentifier(void) {
+void compileIdentifier(void) {
   // DONE - Vuong
   eat(TK_IDENT);
 }

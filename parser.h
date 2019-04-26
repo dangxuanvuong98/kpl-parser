@@ -35,7 +35,7 @@ void compileExpression(void);
 void compileTerm(void);
 void compileFactor(void);
 void compileCondition(void);
-void compileIndentifier(void);
+void compileIdentifier(void);
 void compileUnsignedInteger(void);
 
 int compile(char *fileName);
