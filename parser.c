@@ -294,17 +294,54 @@ void compileForSt(void) {
 }
 
 void compileVariable(void) {
-  // TODO
+  // DONE - Vuong
+  compileIndentifier();
+  while (true) {
+      if (lookAhead->tokenType == SB_LSEL) {
+          eat(SB_LSEL);
+      } else {
+          break;
+      }
+      compileExpression();
+      eat(SB_RSEL);
+  }
 }
 
 void compileExpression(void) {
   assert("Parsing an expression");
-  // TODO
+  // DONE - Vuong
+  if (lookAhead->tokenType == SB_PLUS) {
+      eat(SB_PLUS);
+  } else if (lookAhead->tokenType == SB_MINUS) {
+      eat(SB_MINUS);
+  }
+  compileTerm();
+  while (true) {
+      if (lookAhead->tokenType == SB_PLUS) {
+          eat(SB_PLUS);
+      } else if (lookAhead->tokenType == SB_MINUS) {
+          eat(SB_MINUS);
+      } else {
+          break;
+      }
+      compileFactor();
+  }
   assert("Expression parsed");
 }
 
 void compileTerm(void) {
-  // TODO
+  // DONE - Vuong
+  compileFactor();
+  while (true) {
+      if (lookAhead->tokenType == SB_TIMES) {
+          eat(SB_TIMES);
+      } else if (lookAhead->tokenType == SB_SLASH) {
+          eat(SB_SLASH);
+      } else {
+          break;
+      }
+      compileFactor();
+  }
 }
 
 void compileFactor(void) {
@@ -312,7 +349,32 @@ void compileFactor(void) {
 }
 
 void compileCondition(void) {
-  // TODO
+  // DONE - Vuong
+  compileExpression();
+  switch (lookAhead->tokenType) {
+      case SB_EQ:
+          eat(SB_EQ);
+          break;
+      case SB_LT:
+          eat(SB_LT);
+          break;
+      case SB_GT:
+          eat(SB_GT);
+          break;
+      case SB_NEQ:
+          eat(SB_NEQ);
+          break;
+      case SB_LE:
+          eat(SB_LE);
+          break;
+      case SB_GE:
+          eat(SB_GE);
+          break;
+      default:
+          error(ERR_INVALIDSYMBOL);
+          break;
+  }
+  compileExpression();
 }
 
 void compileIndentifier(void) {
