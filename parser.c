@@ -40,7 +40,7 @@ void compileProgram(void) {
 
 void compileBlock(void) {
   assert("Parsing a Block ....");
-  // DONE
+  // DONE - Vuong
     compileConstDecls();
     compileTypeDecls();
     compileVarDecls();
@@ -57,7 +57,7 @@ void compileBlock(void) {
 }
 
 void compileConstDecls(void) {
-  // DONE
+  // DONE - Vuong
   assert("Parsing constant declares ....");
   if (lookAhead->tokenType == KW_CONST) {
       eat(KW_CONST);
@@ -75,7 +75,7 @@ void compileConstDecls(void) {
 }
 
 void compileTypeDecls(void) {
-  // DONE
+  // DONE - Vuong
   if (lookAhead->tokenType == KW_TYPE) {
       eat(KW_TYPE);
       while (true) {
@@ -92,7 +92,7 @@ void compileTypeDecls(void) {
 }
 
 void compileVarDecls(void) {
-  // DONE
+  // DONE - Vuong
   assert("Parsing variable declares ....")
   if (lookAhead->tokenType == KW_VAR) {
       eat(KW_VAR);
@@ -110,7 +110,7 @@ void compileVarDecls(void) {
 }
 
 void compileSubDecls(void) {
-    // DONE
+    // DONE - Vuong
     assert("Parsing sub routines ....")
     while (true) {
         switch (lookAhead->tokenType) {
@@ -128,7 +128,7 @@ void compileSubDecls(void) {
 
 void compileFuncDecl(void) {
   assert("Parsing a function ....");
-  // DONE
+  // DONE - Vuong
   eat(KW_FUNCTION);
   eat(TK_IDENT);
   if (lookAhead->tokenType == SB_LPAR) {
@@ -144,7 +144,7 @@ void compileFuncDecl(void) {
 
 void compileProcDecl(void) {
   assert("Parsing a procedure ....");
-  // DONE
+  // DONE - Vuong
   eat(KW_PROCEDURE);
   eat(TK_IDENT);
   if (lookAhead->tokenType == SB_LPAR) {
@@ -158,7 +158,7 @@ void compileProcDecl(void) {
 
 void compileParamList(void) {
   assert("Parsing param list ....");
-  // DONE
+  // DONE - Vuong
   eat(SB_LPAR);
   while (true) {
       if (lookAhead->tokenType = KW_VAR) {
@@ -176,7 +176,7 @@ void compileParamList(void) {
 }
 
 void compileUnsignedConstant(void) {
-  // DONE
+  // DONE - Vuong
   switch(lookAhead->tokenType) {
       case TK_NUMBER:
           eat(TK_NUMBER);
@@ -274,11 +274,13 @@ void compileCondition(void) {
 }
 
 void compileIndentifier(void) {
-  // TODO
+  // DONE - Vuong
+  eat(TK_IDENT);
 }
 
 void compileUnsignedInteger(void) {
-  // TODO
+  // DONE - Vuong
+  eat(TK_NUMBER);
 }
 
 int compile(char *fileName) {
