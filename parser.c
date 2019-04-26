@@ -194,18 +194,29 @@ void compileUnsignedConstant(void) {
 }
 
 void compileConstant(void) {
-  // TODO
+  // DONE - Vuong
   assert("Parsing a constant ....");
   if (lookAhead->tokenType == TK_CHAR) {
       eat(TK_CHAR);
   } else {
-      switch (lookAhead->tokenType) {}
+      switch (lookAhead->tokenType) {
+          case SB_MINUS:
+              eat(SB_MINUS);
+              break;
+          case SB_PLUS:
+              eat(SB_PLUS);
+              break;
+          default:
+              break;
+      }
+      compileIndentifier();
   }
   assert("Constant parsed!");
 }
 
 void compileType(void) {
-  // TODO
+  // DOING - Vuong
+  assert("Parsing a type ....");
 }
 
 void compileBasicType(void) {
