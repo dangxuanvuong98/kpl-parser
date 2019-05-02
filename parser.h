@@ -37,6 +37,8 @@ void compileFactor(void);
 void compileCondition(void);
 void compileIdentifier(void);
 void compileUnsignedInteger(void);
+void compileArguments(void);
+void compileIndexes(void);
 
 int compile(char *fileName);
 

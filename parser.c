@@ -28,6 +28,15 @@ void eat(TokenType tokenType) {
   } else missingToken(tokenType, lookAhead->lineNo, lookAhead->colNo);
 }
 
+void compileIndexes(void) {
+  // DONE - Ngoc
+  while ( lookAhead->tokenType == SB_LSEL ) {
+    eat(SB_LSEL);
+    compileExpression();
+    eat(SB_RSEL);
+  }
+}
+
 void compileProgram(void) {
   assert("Parsing a Program ....");
   eat(KW_PROGRAM);
@@ -46,7 +55,7 @@ void compileBlock(void) {
     compileVarDecls();
     compileSubDecls();
     eat(KW_BEGIN);
-    while (true) {
+    while (1) {
         compileStatement();
         if (lookAhead->tokenType == KW_END) {
             break;
@@ -61,7 +70,7 @@ void compileConstDecls(void) {
   assert("Parsing constant declares ....");
   if (lookAhead->tokenType == KW_CONST) {
       eat(KW_CONST);
-      while (true) {
+      while (1) {
           eat(TK_IDENT);
           eat(SB_EQ);
           compileConstant();
@@ -78,7 +87,7 @@ void compileTypeDecls(void) {
   // DONE - Vuong
   if (lookAhead->tokenType == KW_TYPE) {
       eat(KW_TYPE);
-      while (true) {
+      while (1) {
           eat(TK_IDENT);
           eat(SB_EQ);
           compileType();
@@ -93,10 +102,10 @@ void compileTypeDecls(void) {
 
 void compileVarDecls(void) {
   // DONE - Vuong
-  assert("Parsing variable declares ....")
+  assert("Parsing variable declares ....");
   if (lookAhead->tokenType == KW_VAR) {
       eat(KW_VAR);
-      while (true) {
+      while (1) {
           eat(TK_IDENT);
           eat(SB_COLON);
           compileType();
@@ -111,8 +120,8 @@ void compileVarDecls(void) {
 
 void compileSubDecls(void) {
     // DONE - Vuong
-    assert("Parsing sub routines ....")
-    while (true) {
+    assert("Parsing sub routines ....");
+    while (1) {
         switch (lookAhead->tokenType) {
             case KW_FUNCTION:
                 compileFuncDecl();
@@ -160,8 +169,8 @@ void compileParamList(void) {
   assert("Parsing param list ....");
   // DONE - Vuong
   eat(SB_LPAR);
-  while (true) {
-      if (lookAhead->tokenType = KW_VAR) {
+  while (1) {
+      if (lookAhead->tokenType == KW_VAR) {
           eat(KW_VAR);
       }
       eat(TK_IDENT);
@@ -219,7 +228,7 @@ void compileType(void) {
   assert("Parsing a type ....");
   switch (lookAhead->tokenType) {
       case TK_IDENT:
-          compile(TK_IDENT);
+          compileIdentifier();
           break;
       case KW_ARRAY:
           eat(KW_ARRAY);
@@ -283,7 +292,13 @@ void compileStatement(void) {
 
 void compileAssignSt(void) {
   assert("Parsing an assign statement ....");
-  // TODO
+  // DONE - Ngoc
+  eat(TK_IDENT);
+  if (lookAhead->tokenType == SB_LSEL) {
+      compileIndexes();
+  }
+  eat(SB_ASSIGN);
+  compileExpression();
   assert("Assign statement parsed ....");
 }
 
@@ -292,16 +307,6 @@ void compileCallSt(void) {
   // DONE - Vuong
     eat(KW_CALL);
     compileIdentifier();
-    eat(SB_LPAR);
-    while (true) {
-        compileExpression();
-        if (lookAhead->tokenType == SB_COMMA) {
-            eat(SB_COMMA);
-        } else {
-            break;
-        }
-    }
-    eat(SB_RPAR);
   assert("Call statement parsed ....");
 }
 
@@ -310,7 +315,7 @@ void compileGroupSt(void) {
   // DONE - Vuong
   eat(KW_BEGIN);
   compileStatement();
-  while (true) {
+  while (1) {
       if (lookAhead->tokenType == SB_SEMICOLON) {
           eat(SB_SEMICOLON);
       } else {
@@ -329,7 +334,7 @@ void compileIfSt(void) {
   compileCondition();
   eat(KW_THEN);
   compileStatement();
-  if (lookAhead->tokenType = KW_ELSE) {
+  if (lookAhead->tokenType == KW_ELSE) {
       eat(KW_ELSE);
       compileStatement();
   };
@@ -361,9 +366,9 @@ void compileForSt(void) {
 }
 
 void compileVariable(void) {
-  // DONE - Vuong
+  // DONE - Vuong 
   compileIdentifier();
-  while (true) {
+  while (1) {
       if (lookAhead->tokenType == SB_LSEL) {
           eat(SB_LSEL);
       } else {
@@ -376,14 +381,14 @@ void compileVariable(void) {
 
 void compileExpression(void) {
   assert("Parsing an expression");
-  // DONE - Vuong
+  // DONE - Vuong 
   if (lookAhead->tokenType == SB_PLUS) {
       eat(SB_PLUS);
   } else if (lookAhead->tokenType == SB_MINUS) {
       eat(SB_MINUS);
   }
   compileTerm();
-  while (true) {
+  while (1) {
       if (lookAhead->tokenType == SB_PLUS) {
           eat(SB_PLUS);
       } else if (lookAhead->tokenType == SB_MINUS) {
@@ -397,9 +402,9 @@ void compileExpression(void) {
 }
 
 void compileTerm(void) {
-  // DONE - Vuong
+  // DONE - Vuong 
   compileFactor();
-  while (true) {
+  while (1) {
       if (lookAhead->tokenType == SB_TIMES) {
           eat(SB_TIMES);
       } else if (lookAhead->tokenType == SB_SLASH) {
@@ -412,7 +417,34 @@ void compileTerm(void) {
 }
 
 void compileFactor(void) {
-  // TODO
+  // DONE - Ngoc
+  switch (lookAhead->tokenType) {
+  case TK_NUMBER:
+  case TK_CHAR:
+      compileUnsignedConstant();
+      break;
+  case SB_LPAR:
+      eat(SB_LPAR);
+      compileExpression();
+      eat(SB_RPAR);
+      break;
+  case TK_IDENT:
+      eat(TK_IDENT);
+      switch(lookAhead->tokenType) {
+      case SB_LSEL:
+          compileIndexes();
+          break;
+      case SB_LPAR:
+          compileArguments();
+          break;
+      default:
+          break;
+      }
+      break;
+  default:
+      error(ERR_INVALIDFACTOR, lookAhead->lineNo, lookAhead->colNo);
+      break;
+  }
 }
 
 void compileCondition(void) {
@@ -438,11 +470,25 @@ void compileCondition(void) {
           eat(SB_GE);
           break;
       default:
-          error(ERR_INVALIDSYMBOL);
+          error(ERR_INVALIDCOMPARATOR, lookAhead->lineNo, lookAhead->colNo);
           break;
   }
   compileExpression();
 }
+
+void compileArguments(void) {
+  eat(SB_LPAR);
+  while (1) {
+      compileExpression();
+      if (lookAhead->tokenType == SB_COMMA) {
+          eat(SB_COMMA);
+      } else {
+          break;
+      }
+  }
+  eat(SB_RPAR);
+}
+
 
 void compileIdentifier(void) {
   // DONE - Vuong
