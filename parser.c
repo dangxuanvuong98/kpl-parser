@@ -60,6 +60,7 @@ void compileBlock(void) {
         if (lookAhead->tokenType == KW_END) {
             break;
         }
+        eat(SB_SEMICOLON);
     }
     eat(KW_END);
   assert("Block parsed!");
@@ -181,6 +182,7 @@ void compileParamList(void) {
       }
       eat(SB_SEMICOLON);
   }
+  eat(SB_RPAR);
   assert("Param list parsed ....");
 }
 
@@ -305,11 +307,11 @@ void compileAssignSt(void) {
 void compileCallSt(void) {
   assert("Parsing a call statement ....");
   // DONE - Vuong
-    eat(KW_CALL);
-    compileIdentifier();
-	if (lookAhead->tokenType == SB_LPAR) {
-		compileArguments();
-	}
+  eat(KW_CALL);
+  compileIdentifier();
+  if ( lookAhead->tokenType == SB_LPAR ) {
+    compileArguments();
+  }
   assert("Call statement parsed ....");
 }
 
@@ -341,6 +343,7 @@ void compileIfSt(void) {
       eat(KW_ELSE);
       compileStatement();
   };
+
   assert("If statement parsed ....");
 }
 
