@@ -220,7 +220,17 @@ void compileConstant(void) {
           default:
               break;
       }
-      compileIdentifier();
+      switch (lookAhead->tokenType) {
+          case TK_IDENT:
+              eat(TK_IDENT);
+              break;
+          case TK_NUMBER:
+              eat(TK_NUMBER);
+              break;
+          default:
+              error(ERR_INVALIDCONSTANT, lookAhead->lineNo, lookAhead->colNo);
+              break;
+      }
   }
   assert("Constant parsed!");
 }
