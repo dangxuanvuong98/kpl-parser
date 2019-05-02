@@ -307,6 +307,9 @@ void compileCallSt(void) {
   // DONE - Vuong
     eat(KW_CALL);
     compileIdentifier();
+	if (lookAhead->tokenType == SB_LPAR) {
+		compileArguments();
+	}
   assert("Call statement parsed ....");
 }
 
