@@ -447,26 +447,25 @@ void compileCondition(void) {
   compileExpression();
 }
 
-void compileArguments(void) {
-  eat(SB_LPAR);
-  while (1) {
-      compileExpression();
-      if (lookAhead->tokenType == SB_COMMA) {
-          eat(SB_COMMA);
-      } else {
-          break;
-      }
-  }
-  eat(SB_RPAR);
-}
-
-
 void compileIdentifier(void) {
   eat(TK_IDENT);
 }
 
 void compileUnsignedInteger(void) {
   eat(TK_NUMBER);
+}
+
+void compileArguments(void) {
+    eat(SB_LPAR);
+    while (1) {
+        compileExpression();
+        if (lookAhead->tokenType == SB_COMMA) {
+            eat(SB_COMMA);
+        } else {
+            break;
+        }
+    }
+    eat(SB_RPAR);
 }
 
 void compileIndexes(void) {
