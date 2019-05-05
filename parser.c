@@ -273,7 +273,7 @@ void compileBasicType(void) {
           eat(KW_CHAR);
           break;
       default:
-          error(ERR_INVALIDBASICTYPETYPE, lookAhead->lineNo, lookAhead->colNo);
+          error(ERR_INVALIDBASICTYPE, lookAhead->lineNo, lookAhead->colNo);
           break;
   }
 }
