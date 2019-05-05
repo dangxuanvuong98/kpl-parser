@@ -28,6 +28,15 @@ void eat(TokenType tokenType) {
   } else missingToken(tokenType, lookAhead->lineNo, lookAhead->colNo);
 }
 
+
+
+
+
+
+
+
+
+
 void compileIndexes(void) {
   // DONE - Ngoc
   while ( lookAhead->tokenType == SB_LSEL ) {
@@ -36,6 +45,7 @@ void compileIndexes(void) {
     eat(SB_RSEL);
   }
 }
+
 
 void compileProgram(void) {
   assert("Parsing a Program ....");
@@ -109,7 +119,7 @@ void compileVarDecls(void) {
       while (1) {
           eat(TK_IDENT);
           eat(SB_COLON);
-          compileType();
+          compileType();                    
           eat(SB_SEMICOLON);
           if (lookAhead->tokenType != TK_IDENT) {
               break;
@@ -145,7 +155,7 @@ void compileFuncDecl(void) {
     compileParamList();
   }
   eat(SB_COLON);
-  compileType();
+  compileBasicType();
   eat(SB_SEMICOLON);
   compileBlock();
   eat(SB_SEMICOLON);
@@ -412,7 +422,7 @@ void compileExpression(void) {
       } else {
           break;
       }
-      compileFactor();
+      compileTerm();
   }
   assert("Expression parsed");
 }
