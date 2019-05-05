@@ -60,11 +60,17 @@ void compileProgram(void) {
 void compileBlock(void) {
   assert("Parsing a Block ....");
   // DONE - Vuong
-    compileConstDecls();
-    compileTypeDecls();
-    compileVarDecls();
-    compileSubDecls();
-    eat(KW_BEGIN);
+	if (lookAhead->tokenType == KW_CONST) {
+		compileConstDecls();
+	}
+	if (lookAhead->tokenType == KW_TYPE) {
+		compileTypeDecls();
+	}
+	if (lookAhead->tokenType == KW_VAR) {
+		compileVarDecls();
+	}
+	compileSubDecls();
+	eat(KW_BEGIN);
     while (1) {
         compileStatement();
         if (lookAhead->tokenType == KW_END) {
@@ -79,34 +85,30 @@ void compileBlock(void) {
 void compileConstDecls(void) {
   // DONE - Vuong
   assert("Parsing constant declares ....");
-  if (lookAhead->tokenType == KW_CONST) {
-      eat(KW_CONST);
-      while (1) {
-          eat(TK_IDENT);
-          eat(SB_EQ);
-          compileConstant();
-          eat(SB_SEMICOLON);
-          if (lookAhead->tokenType != TK_IDENT) {
-              break;
-          }
-      }
+  eat(KW_CONST);
+  while (1) {
+	  eat(TK_IDENT);
+	  eat(SB_EQ);
+	  compileConstant();
+	  eat(SB_SEMICOLON);
+	  if (lookAhead->tokenType != TK_IDENT) {
+		  break;
+	  }
   }
   assert("Constant declares parsed ....");
 }
 
 void compileTypeDecls(void) {
   // DONE - Vuong
-  if (lookAhead->tokenType == KW_TYPE) {
-      eat(KW_TYPE);
-      while (1) {
-          eat(TK_IDENT);
-          eat(SB_EQ);
-          compileType();
-          eat(SB_SEMICOLON);
-          if (lookAhead->tokenType != TK_IDENT) {
-              break;
-          }
-      }
+  eat(KW_TYPE);
+  while (1) {
+	  eat(TK_IDENT);
+	  eat(SB_EQ);
+	  compileType();
+	  eat(SB_SEMICOLON);
+	  if (lookAhead->tokenType != TK_IDENT) {
+		  break;
+	  }
   }
   assert("Type declares parsed ....");
 }
@@ -114,17 +116,15 @@ void compileTypeDecls(void) {
 void compileVarDecls(void) {
   // DONE - Vuong
   assert("Parsing variable declares ....");
-  if (lookAhead->tokenType == KW_VAR) {
-      eat(KW_VAR);
-      while (1) {
-          eat(TK_IDENT);
-          eat(SB_COLON);
-          compileType();                    
-          eat(SB_SEMICOLON);
-          if (lookAhead->tokenType != TK_IDENT) {
-              break;
-          }
-      }
+  eat(KW_VAR);
+  while (1) {
+	  eat(TK_IDENT);
+	  eat(SB_COLON);
+	  compileType();
+	  eat(SB_SEMICOLON);
+	  if (lookAhead->tokenType != TK_IDENT) {
+		  break;
+	  }
   }
   assert("Variable declares parsed ....");
 }
