@@ -79,30 +79,24 @@ void compileConstDecls(void) {
   // DONE - Vuong
   assert("Parsing constant declares ....");
   eat(KW_CONST);
-  while (1) {
+  do {
 	  eat(TK_IDENT);
 	  eat(SB_EQ);
 	  compileConstant();
 	  eat(SB_SEMICOLON);
-	  if (lookAhead->tokenType != TK_IDENT) {
-		  break;
-	  }
-  }
+  } while (lookAhead->tokenType == TK_IDENT);
   assert("Constant declares parsed ....");
 }
 
 void compileTypeDecls(void) {
   // DONE - Vuong
   eat(KW_TYPE);
-  while (1) {
+  do {
 	  eat(TK_IDENT);
 	  eat(SB_EQ);
 	  compileType();
 	  eat(SB_SEMICOLON);
-	  if (lookAhead->tokenType != TK_IDENT) {
-		  break;
-	  }
-  }
+  } while (lookAhead->tokenType == TK_IDENT);
   assert("Type declares parsed ....");
 }
 
@@ -110,31 +104,23 @@ void compileVarDecls(void) {
   // DONE - Vuong
   assert("Parsing variable declares ....");
   eat(KW_VAR);
-  while (1) {
+  do {
 	  eat(TK_IDENT);
 	  eat(SB_COLON);
 	  compileType();
 	  eat(SB_SEMICOLON);
-	  if (lookAhead->tokenType != TK_IDENT) {
-		  break;
-	  }
-  }
+  } while (lookAhead->tokenType == TK_IDENT);
   assert("Variable declares parsed ....");
 }
 
 void compileSubDecls(void) {
     // DONE - Vuong
     assert("Parsing sub routines ....");
-    while (1) {
-        switch (lookAhead->tokenType) {
-            case KW_FUNCTION:
-                compileFuncDecl();
-                break;
-            case KW_PROCEDURE:
-                compileProcDecl();
-                break;
-            default:
-                return;
+    while (lookAhead->tokenType == KW_FUNCTION || lookAhead->tokenType == KW_PROCEDURE) {
+        if (lookAhead->tokenType == KW_FUNCTION) {
+            compileFuncDecl();
+        } else {
+            compileProcDecl();
         }
     };
 }
@@ -173,7 +159,7 @@ void compileParamList(void) {
   assert("Parsing param list ....");
   // DONE - Vuong
   eat(SB_LPAR);
-  while (1) {
+  do {
       if (lookAhead->tokenType == KW_VAR) {
           eat(KW_VAR);
       }
@@ -181,10 +167,13 @@ void compileParamList(void) {
       eat(SB_COLON);
       compileBasicType();
       if (lookAhead->tokenType != SB_SEMICOLON) {
-        break;
-      }
+          if (lookAhead->tokenType != SB_RPAR) {
+              error(ERR_INVALIDPARAM, lookAhead->lineNo, lookAhead->colNo);
+          }
+          break;
+      };
       eat(SB_SEMICOLON);
-  }
+  } while (lookAhead->tokenType != SB_RPAR);
   eat(SB_RPAR);
   assert("Param list parsed ....");
 }
@@ -299,10 +288,12 @@ void compileStatement(void) {
       case KW_FOR:
           compileForSt();
           break;
+      case SB_SEMICOLON:
+      case KW_END:
+      case KW_ELSE:
+          break;
       default:
-          if (lookAhead->tokenType != SB_SEMICOLON && lookAhead->tokenType != KW_END) {
-              error(ERR_INVALIDSTATEMENT, lookAhead->lineNo, lookAhead->colNo);
-          }
+          error(ERR_INVALIDSTATEMENT, lookAhead->lineNo, lookAhead->colNo);
           break;
   }
   assert("Statement parsed!");
@@ -409,17 +400,6 @@ void compileExpression(void) {
   } else if (lookAhead->tokenType == SB_MINUS) {
       eat(SB_MINUS);
   }
-//  compileTerm();
-//  while (1) {
-//      if (lookAhead->tokenType == SB_PLUS) {
-//          eat(SB_PLUS);
-//      } else if (lookAhead->tokenType == SB_MINUS) {
-//          eat(SB_MINUS);
-//      } else {
-//          break;
-//      }
-//      compileTerm();
-//  }
   do {
       compileTerm();
         if (lookAhead->tokenType == SB_PLUS) {
@@ -434,27 +414,35 @@ void compileExpression(void) {
 }
 
 void compileTerm(void) {
-  // DONE - Vuong 
-//  compileFactor();
-//  while (1) {
-//      if (lookAhead->tokenType == SB_TIMES) {
-//          eat(SB_TIMES);
-//      } else if (lookAhead->tokenType == SB_SLASH) {
-//          eat(SB_SLASH);
-//      } else {
-//          break;
-//      }
-//      compileFactor();
-//  }
+  // DONE - Vuong
     do {
         compileFactor();
-        if (lookAhead->tokenType == SB_TIMES) {
-            eat(SB_TIMES);
-        } else if (lookAhead->tokenType == SB_SLASH) {
-            eat(SB_SLASH);
-        } else {
-            break;
-        };
+        switch (lookAhead->tokenType) {
+            case SB_TIMES:
+                eat(SB_TIMES);
+                break;
+            case SB_SLASH:
+                eat(SB_SLASH);
+                break;
+            case SB_PLUS:
+            case SB_MINUS:
+            case SB_SEMICOLON:
+            case KW_END:
+            case KW_THEN:
+            case KW_DO:
+            case SB_RSEL:
+            case SB_LT:
+            case SB_LE:
+            case SB_GT:
+            case SB_GE:
+            case SB_EQ:
+            case SB_NEQ:
+            case SB_RPAR:
+                break;
+            default:
+                error(ERR_INVALIDTERM, lookAhead->lineNo, lookAhead->colNo);
+                break;
+        }
     } while (1);
 }
 
