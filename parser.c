@@ -28,15 +28,6 @@ void eat(TokenType tokenType) {
   } else missingToken(tokenType, lookAhead->lineNo, lookAhead->colNo);
 }
 
-
-
-
-
-
-
-
-
-
 void compileIndexes(void) {
   // DONE - Ngoc
   assert("Parsing indexes ....");
@@ -47,7 +38,6 @@ void compileIndexes(void) {
   };
   assert("Indexes parsed!");
 }
-
 
 void compileProgram(void) {
   assert("Parsing a Program ....");
@@ -146,7 +136,7 @@ void compileSubDecls(void) {
             default:
                 return;
         }
-    }
+    };
 }
 
 void compileFuncDecl(void) {
@@ -435,17 +425,27 @@ void compileExpression(void) {
 
 void compileTerm(void) {
   // DONE - Vuong 
-  compileFactor();
-  while (1) {
-      if (lookAhead->tokenType == SB_TIMES) {
-          eat(SB_TIMES);
-      } else if (lookAhead->tokenType == SB_SLASH) {
-          eat(SB_SLASH);
-      } else {
-          break;
-      }
-      compileFactor();
-  }
+//  compileFactor();
+//  while (1) {
+//      if (lookAhead->tokenType == SB_TIMES) {
+//          eat(SB_TIMES);
+//      } else if (lookAhead->tokenType == SB_SLASH) {
+//          eat(SB_SLASH);
+//      } else {
+//          break;
+//      }
+//      compileFactor();
+//  }
+    do {
+        compileFactor();
+        if (lookAhead->tokenType == SB_TIMES) {
+            eat(SB_TIMES);
+        } else if (lookAhead->tokenType == SB_SLASH) {
+            eat(SB_SLASH);
+        } else {
+            break;
+        };
+    } while (1);
 }
 
 void compileFactor(void) {
