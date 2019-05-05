@@ -54,13 +54,13 @@ void compileBlock(void) {
   // DONE - Vuong
 	if (lookAhead->tokenType == KW_CONST) {
 		compileConstDecls();
-	}
+	};
 	if (lookAhead->tokenType == KW_TYPE) {
 		compileTypeDecls();
-	}
+	};
 	if (lookAhead->tokenType == KW_VAR) {
 		compileVarDecls();
-	}
+	};
 	compileSubDecls();
 	eat(KW_BEGIN);
     while (1) {
