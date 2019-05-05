@@ -409,17 +409,27 @@ void compileExpression(void) {
   } else if (lookAhead->tokenType == SB_MINUS) {
       eat(SB_MINUS);
   }
-  compileTerm();
-  while (1) {
-      if (lookAhead->tokenType == SB_PLUS) {
-          eat(SB_PLUS);
-      } else if (lookAhead->tokenType == SB_MINUS) {
-          eat(SB_MINUS);
-      } else {
-          break;
-      }
+//  compileTerm();
+//  while (1) {
+//      if (lookAhead->tokenType == SB_PLUS) {
+//          eat(SB_PLUS);
+//      } else if (lookAhead->tokenType == SB_MINUS) {
+//          eat(SB_MINUS);
+//      } else {
+//          break;
+//      }
+//      compileTerm();
+//  }
+  do {
       compileTerm();
-  }
+        if (lookAhead->tokenType == SB_PLUS) {
+          eat(SB_PLUS);
+        } else if (lookAhead->tokenType == SB_MINUS) {
+          eat(SB_MINUS);
+        } else {
+          break;
+        }
+  } while (1);
   assert("Expression parsed");
 }
 
