@@ -39,11 +39,13 @@ void eat(TokenType tokenType) {
 
 void compileIndexes(void) {
   // DONE - Ngoc
+  assert("Parsing indexes ....");
   while ( lookAhead->tokenType == SB_LSEL ) {
     eat(SB_LSEL);
     compileExpression();
     eat(SB_RSEL);
-  }
+  };
+  assert("Indexes parsed!");
 }
 
 
@@ -73,10 +75,11 @@ void compileBlock(void) {
 	eat(KW_BEGIN);
     while (1) {
         compileStatement();
-        if (lookAhead->tokenType == KW_END) {
+        if (lookAhead->tokenType == SB_SEMICOLON) {
+            eat(SB_SEMICOLON);
+        } else {
             break;
-        }
-        eat(SB_SEMICOLON);
+        };
     }
     eat(KW_END);
   assert("Block parsed!");
@@ -307,6 +310,9 @@ void compileStatement(void) {
           compileForSt();
           break;
       default:
+          if (lookAhead->tokenType != SB_SEMICOLON && lookAhead->tokenType != KW_END) {
+              error(ERR_INVALIDSTATEMENT, lookAhead->lineNo, lookAhead->colNo);
+          }
           break;
   }
   assert("Statement parsed!");
